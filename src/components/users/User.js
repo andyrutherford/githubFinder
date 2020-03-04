@@ -96,6 +96,11 @@ const User = ({ match }) => {
         <div className='badge badge-light'>Public Repos: {public_repos}</div>
         <div className='badge badge-dark'>Public Gists: {public_gists}</div>
       </div>
+      <div className='grid-3'>
+        <div className='card text-center'>Followers: {followers}</div>
+        <div className='card text-center'>Following: {following}</div>
+        <div className='card text-center'>Public Repos: {public_repos}</div>
+      </div>
       <Repos repos={repos} />
     </Fragment>
   );
