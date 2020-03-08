@@ -7,7 +7,8 @@ import {
   SET_LOADING,
   CLEAR_USERS,
   GET_USER,
-  GET_REPOS
+  GET_REPOS_SORT_CREATED,
+  GET_REPOS_SORT_STARS
 } from '../types';
 
 let githubClientId;
@@ -25,7 +26,8 @@ const GithubState = props => {
   const initialState = {
     users: [],
     user: {},
-    repos: [],
+    reposSortCreated: [],
+    reposSortStars: [],
     loading: false
   };
 
@@ -59,17 +61,30 @@ const GithubState = props => {
     dispatch({ type: GET_USER, payload: res.data });
   };
 
-  // Get Repos
-  const getUserRepos = async username => {
+  // Get Repos sorted by create date
+  const getUserReposSortCreated = async username => {
     setLoading();
 
     const res = await axios.get(
-      `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=
+      `https://api.github.com/users/${username}/repos?per_page=10&sort=created:asc&client_id=
         ${githubClientId}&client_secret
         ${githubClientSecret}`
     );
 
-    dispatch({ type: GET_REPOS, payload: res.data });
+    dispatch({ type: GET_REPOS_SORT_CREATED, payload: res.data });
+  };
+
+  // Get Repos sorted by star count
+  const getUserReposSortStars = async username => {
+    setLoading();
+
+    const res = await axios.get(
+      `https://api.github.com/users/${username}/repos?per_page=100&sort=created:asc&client_id=
+        ${githubClientId}&client_secret
+        ${githubClientSecret}`
+    );
+
+    dispatch({ type: GET_REPOS_SORT_STARS, payload: res.data });
   };
 
   // Clear Users
@@ -83,12 +98,14 @@ const GithubState = props => {
       value={{
         users: state.users,
         user: state.user,
-        repos: state.repos,
+        reposSortCreated: state.reposSortCreated,
+        reposSortStars: state.reposSortStars,
         loading: state.loading,
         searchUsers,
         clearUsers,
         getUser,
-        getUserRepos
+        getUserReposSortCreated,
+        getUserReposSortStars
       }}
     >
       {props.children}

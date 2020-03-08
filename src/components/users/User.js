@@ -1,13 +1,25 @@
-import React, { useEffect, Fragment, useContext } from 'react';
+import React, { useEffect, Fragment, useContext, useState } from 'react';
 import Spinner from '../layout/Spinner';
 import Repos from '../repos/Repos';
 import { Link } from 'react-router-dom';
+import GhPolyglot from 'gh-polyglot';
+
 import GithubContext from '../../context/github/githubContext';
+import MostStarredReposChart from '../users/charts/MostStarredReposChart';
+import TopLanguagesChart from '../users/charts/TopLanguagesChart';
 
 const User = ({ match }) => {
   const githubContext = useContext(GithubContext);
 
-  const { getUser, loading, user, repos, getUserRepos } = githubContext;
+  const {
+    getUser,
+    getUserReposSortStars,
+    getUserReposSortCreated,
+    loading,
+    user,
+    reposSortCreated,
+    reposSortStars
+  } = githubContext;
 
   const {
     name,
@@ -25,9 +37,23 @@ const User = ({ match }) => {
     hireable
   } = user;
 
+  const [langData, setLangData] = useState(null);
+
+  const getLangData = () => {
+    const me = new GhPolyglot(`bradtraversy`);
+    me.userStats((err, stats) => {
+      if (err) {
+        console.error('Error:', err);
+      }
+      setLangData(stats);
+    });
+  };
+
   useEffect(() => {
     getUser(match.params.login);
-    getUserRepos(match.params.login);
+    getUserReposSortCreated(match.params.login);
+    getUserReposSortStars(match.params.login);
+    getLangData();
     // eslint-disable-next-line
   }, []);
 
@@ -96,12 +122,11 @@ const User = ({ match }) => {
         <div className='badge badge-light'>Public Repos: {public_repos}</div>
         <div className='badge badge-dark'>Public Gists: {public_gists}</div>
       </div>
-      <div className='grid-3'>
-        <div className='card text-center'>Followers: {followers}</div>
-        <div className='card text-center'>Following: {following}</div>
-        <div className='card text-center'>Public Repos: {public_repos}</div>
+      <div className='card text-center grid-2'>
+        <MostStarredReposChart repos={reposSortStars} />
+        {langData && <TopLanguagesChart langData={langData} />}
       </div>
-      <Repos repos={repos} />
+      <Repos repos={reposSortCreated} />
     </Fragment>
   );
 };
