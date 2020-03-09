@@ -7,8 +7,7 @@ import {
   SET_LOADING,
   CLEAR_USERS,
   GET_USER,
-  GET_REPOS_SORT_CREATED,
-  GET_REPOS_SORT_STARS
+  GET_REPOS
 } from '../types';
 
 let githubClientId;
@@ -26,8 +25,7 @@ const GithubState = props => {
   const initialState = {
     users: [],
     user: {},
-    reposSortCreated: [],
-    reposSortStars: [],
+    repos: [],
     loading: false
   };
 
@@ -61,21 +59,8 @@ const GithubState = props => {
     dispatch({ type: GET_USER, payload: res.data });
   };
 
-  // Get Repos sorted by create date
-  const getUserReposSortCreated = async username => {
-    setLoading();
-
-    const res = await axios.get(
-      `https://api.github.com/users/${username}/repos?per_page=10&sort=created:asc&client_id=
-        ${githubClientId}&client_secret
-        ${githubClientSecret}`
-    );
-
-    dispatch({ type: GET_REPOS_SORT_CREATED, payload: res.data });
-  };
-
-  // Get Repos sorted by star count
-  const getUserReposSortStars = async username => {
+  // Get last 100 user repos
+  const getUserRepos = async username => {
     setLoading();
 
     const res = await axios.get(
@@ -84,7 +69,7 @@ const GithubState = props => {
         ${githubClientSecret}`
     );
 
-    dispatch({ type: GET_REPOS_SORT_STARS, payload: res.data });
+    dispatch({ type: GET_REPOS, payload: res.data });
   };
 
   // Clear Users
@@ -98,14 +83,12 @@ const GithubState = props => {
       value={{
         users: state.users,
         user: state.user,
-        reposSortCreated: state.reposSortCreated,
-        reposSortStars: state.reposSortStars,
+        repos: state.repos,
         loading: state.loading,
         searchUsers,
         clearUsers,
         getUser,
-        getUserReposSortCreated,
-        getUserReposSortStars
+        getUserRepos
       }}
     >
       {props.children}

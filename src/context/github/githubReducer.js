@@ -3,8 +3,7 @@ import {
   SET_LOADING,
   CLEAR_USERS,
   GET_USER,
-  GET_REPOS_SORT_CREATED,
-  GET_REPOS_SORT_STARS
+  GET_REPOS
 } from '../types';
 
 export default (state, action) => {
@@ -27,16 +26,10 @@ export default (state, action) => {
         user: action.payload,
         loading: false
       };
-    case GET_REPOS_SORT_STARS:
+    case GET_REPOS:
       return {
         ...state,
-        reposSortStars: action.payload,
-        loading: false
-      };
-    case GET_REPOS_SORT_CREATED:
-      return {
-        ...state,
-        reposSortCreated: action.payload,
+        repos: action.payload,
         loading: false
       };
     case SET_LOADING:

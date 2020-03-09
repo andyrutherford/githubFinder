@@ -7,7 +7,7 @@ const TopLanguagesChart = ({ langData, description }) => {
   const [chartData, setChartData] = useState(null);
 
   const initLangChart = () => {
-    langData = langData.slice(0, 10);
+    langData = langData.slice(0, 20);
     const labels = langData.map(lang => lang.label);
     const data = langData.map(lang => lang.value);
     const colors = langData.map(lang => lang.color);

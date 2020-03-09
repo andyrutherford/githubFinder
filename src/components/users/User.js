@@ -11,15 +11,7 @@ import TopLanguagesChart from '../users/charts/TopLanguagesChart';
 const User = ({ match }) => {
   const githubContext = useContext(GithubContext);
 
-  const {
-    getUser,
-    getUserReposSortStars,
-    getUserReposSortCreated,
-    loading,
-    user,
-    reposSortCreated,
-    reposSortStars
-  } = githubContext;
+  const { getUser, getUserRepos, loading, user, repos } = githubContext;
 
   const {
     name,
@@ -33,14 +25,14 @@ const User = ({ match }) => {
     followers,
     following,
     public_repos,
-    public_gists,
-    hireable
+    hireable,
+    created_at
   } = user;
 
   const [langData, setLangData] = useState(null);
 
   const getLangData = () => {
-    const me = new GhPolyglot(`bradtraversy`);
+    const me = new GhPolyglot(match.params.login);
     me.userStats((err, stats) => {
       if (err) {
         console.error('Error:', err);
@@ -51,8 +43,7 @@ const User = ({ match }) => {
 
   useEffect(() => {
     getUser(match.params.login);
-    getUserReposSortCreated(match.params.login);
-    getUserReposSortStars(match.params.login);
+    getUserRepos(match.params.login);
     getLangData();
     // eslint-disable-next-line
   }, []);
@@ -79,7 +70,22 @@ const User = ({ match }) => {
             style={{ width: '150px' }}
           />
           <h1>{name}</h1>
-          <p>Location: {location}</p>
+          {location && (
+            <p>
+              <i className='fas fa-map-marker-alt'></i> {location}
+            </p>
+          )}
+          {created_at && (
+            <p>
+              <i class='far fa-calendar-alt'></i> Joined{' '}
+              {created_at &&
+                created_at
+                  .split('-')
+                  .slice(0, 2)
+                  .reverse()
+                  .join('-')}
+            </p>
+          )}
         </div>
         <div>
           {bio && (
@@ -95,38 +101,54 @@ const User = ({ match }) => {
             <li>
               {login && (
                 <Fragment>
-                  <strong>Username:</strong> {login}
+                  <i className='fab fa-github'></i>{' '}
+                  <a href={html_url}>@{login}</a>
                 </Fragment>
               )}
             </li>
             <li>
               {company && (
                 <Fragment>
-                  <strong>Company:</strong> {company}
+                  <i className='fas fa-briefcase'></i> {company}
                 </Fragment>
               )}
             </li>
             <li>
               {blog && (
                 <Fragment>
-                  <strong>Website:</strong> <a href={blog}>{blog}</a>
+                  <i className='fas fa-map-pin'></i>
+                  <a href={blog}> {blog}</a>
                 </Fragment>
               )}
             </li>
           </ul>
         </div>
       </div>
-      <div className='card text-center'>
-        <div className='badge badge-primary'>Followers: {followers}</div>
-        <div className='badge badge-success'>Following: {following}</div>
-        <div className='badge badge-light'>Public Repos: {public_repos}</div>
-        <div className='badge badge-dark'>Public Gists: {public_gists}</div>
+      <div className=' text-center'>
+        <div className='badge badge-light'>
+          {' '}
+          <span className='large'>{public_repos}</span>
+          <p>Repos</p>
+        </div>
+        <div className='badge badge-primary'>
+          <span className='large'>{followers}</span>
+          <p>Followers</p>
+        </div>
+        <div className='badge badge-success'>
+          {' '}
+          <span className='large'>{following}</span>
+          <p>Following</p>
+        </div>
       </div>
       <div className='card text-center grid-2'>
-        <MostStarredReposChart repos={reposSortStars} />
+        {repos && <MostStarredReposChart repos={repos} />}
         {langData && <TopLanguagesChart langData={langData} />}
       </div>
-      <Repos repos={reposSortCreated} />
+      <div className='card'>
+        {' '}
+        <p className='large'>Top Repos</p>
+        <div className='grid-3'> {repos && <Repos repoData={repos} />}</div>
+      </div>
     </Fragment>
   );
 };
