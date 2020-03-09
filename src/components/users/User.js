@@ -77,7 +77,7 @@ const User = ({ match }) => {
           )}
           {created_at && (
             <p>
-              <i class='far fa-calendar-alt'></i> Joined{' '}
+              <i className='far fa-calendar-alt'></i> Joined{' '}
               {created_at &&
                 created_at
                   .split('-')
@@ -130,11 +130,11 @@ const User = ({ match }) => {
           <span className='large'>{public_repos}</span>
           <p>Repos</p>
         </div>
-        <div className='badge badge-primary'>
+        <div className='badge badge-light'>
           <span className='large'>{followers}</span>
           <p>Followers</p>
         </div>
-        <div className='badge badge-success'>
+        <div className='badge badge-light'>
           {' '}
           <span className='large'>{following}</span>
           <p>Following</p>
