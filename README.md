@@ -1,4 +1,4 @@
-# Github Profile Viewer
+# GithubFinder
 
 View a simple and stylish overview of a user's github profile
 
@@ -10,7 +10,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com/) and [
 
 ```sh
 # Clone this repository
-$ git clone https://github.com/andyrutherford/.git
+$ git clone https://github.com/andyrutherford/githubFinder.git
 
 # Go into the repository
 $ cd
@@ -30,6 +30,8 @@ $ npm start
 - [Github API](https://developer.github.com/v3/)
 
 ## Demo
+
+https://github-finder1940.herokuapp.com/
 
 ## License
 
