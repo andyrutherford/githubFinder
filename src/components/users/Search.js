@@ -8,7 +8,7 @@ const Search = () => {
 
   const [text, setText] = useState('');
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (text === '') {
       alertContext.setAlert('Please enter something', 'light');
@@ -18,7 +18,7 @@ const Search = () => {
     }
   };
 
-  const onChange = e => setText(e.target.value);
+  const onChange = (e) => setText(e.target.value);
 
   return (
     <div>
@@ -36,9 +36,6 @@ const Search = () => {
           className='btn btn-dark btn-block'
         />
       </form>
-      <a href='/user/bradtraversy' rel='noopener noreferrer'>
-        user/bradtraversy
-      </a>
       {githubContext.users.length > 0 && (
         <button
           className='btn btn-light btn-block'

@@ -5,10 +5,10 @@ const RepoItem = ({ repo }) => {
   return (
     <div className='card repo-card'>
       <div className='repo-content'>
-        <h3>
+        <h2>
           <i className='fas fa-swatchbook'></i>{' '}
           <a href={repo.html_url}>{repo.name}</a>
-        </h3>
+        </h2>
         <p className='repo-description'>
           {repo.description ? (
             repo.description
@@ -38,7 +38,9 @@ const RepoItem = ({ repo }) => {
           <div className='repo-stat'>
             <p>
               {' '}
-              {repo.size > 1000 ? repo.size / 100 + ' MB' : repo.size + ' KB'}
+              {repo.size && repo.size > 1000
+                ? Math.floor(repo.size / 100) + ' MB'
+                : repo.size + ' KB'}
             </p>
           </div>
         </div>
