@@ -31,7 +31,7 @@ $ npm start
 
 ## Demo
 
-https://github-finder1940.herokuapp.com/
+https://githubfinder-1847.netlify.app/
 
 ## License
 
